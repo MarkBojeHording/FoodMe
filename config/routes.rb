@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#home"
+  root to: "menus#new"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
   # root "articles#index"
+  resources :menus, only: [:create] do
+    resources :dishes, only: [:index , :create]
+  end
+  resources :dishes, only: [:index, :create] do
+    resources :ingredients, only: [ :index, :create]
+  end
 end
