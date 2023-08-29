@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :menus, only: [:create] do
     resources :dishes, only: [:index , :create]
   end
-  resources :dishes, only: [:index, :create] do
+  resources :dishes, only: [:index] do
     resources :ingredients, only: [ :index, :create]
   end
 end
