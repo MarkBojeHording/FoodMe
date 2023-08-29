@@ -1,4 +1,8 @@
 class DishesController < ApplicationController
+   def index
+    @dishes = Dish.all
+   end
+  
   def hehe
     @menu = Menu.new(menu_params)
     @menu.user = current_user
