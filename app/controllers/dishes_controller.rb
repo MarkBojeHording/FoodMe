@@ -1,5 +1,6 @@
 class DishesController < ApplicationController
 
-  def send
+  def index
+    @dishes = Dish.all
   end
 end
