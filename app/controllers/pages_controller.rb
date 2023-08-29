@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
-  before_action :set_menu
+  # before_action :set_menu
   def new
-    @menu = Menu.new()
+    @menu = Menu.new
   end
 
   def set_menu
