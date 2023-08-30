@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+
   root to: "pages#new"
   post "/hehe", to: "dishes#hehe"
   # get "show", to: "dishes#show"
