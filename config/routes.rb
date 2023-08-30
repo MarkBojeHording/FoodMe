@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   root to: "pages#new"
-  post "/hehe", to: "dishes#hehe"
+  post "/text_extract", to: "dishes#text_extract"
   # get "show", to: "dishes#show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
