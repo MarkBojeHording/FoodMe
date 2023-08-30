@@ -1,5 +1,16 @@
 class PagesController < ApplicationController
-  def home
+  # before_action :set_menu
+  def new
+    @menu = Menu.new
+  end
+
+  def set_menu
+    # @menu = Menu.find(params[:id])
+  end
+
+  def menu_params
+    params.require(:menu).permit(:restaurant_name)
+  end
 
       # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
       # and so the following code will take the entire block and *hopefully* return the
