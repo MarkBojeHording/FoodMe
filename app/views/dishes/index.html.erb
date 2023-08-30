@@ -8,20 +8,20 @@
   <div class="row">
     <% @dishes.each do |dish| %>
       <swiper-container navigation="true" pagination="true" scrollbar="true" effect="coverflow">
-          <%= dish.photos.each do |photo| %>
+        <% dish.photos.each do |photo| %>
           <swiper-slide>
-              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3))"  alt="First slide">
-                <%= cl_image_tag dish.photo.key,
-                  transformation: [
-                    {:width=>400, :height=>300, :crop=>"fill"},
-                    {:overlay=>{:font_family=>"Cookie", :font_size=>40, :font_weight=>"bold", :text=>"#{dish.title}"}, :color=>"#fff"},
-                    {:angle=>0, :flags=>"layer_apply", :x=>10, :y=>10}
-                  ],
-                  height: 300, width: 400, crop: :fill %>
-              </div>
+            <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3))"  alt="First slide">
+              <%= cl_image_tag photo.key,
+                transformation: [
+                  {:width=>400, :height=>300, :crop=>"fill"},
+                  {:overlay=>{:font_family=>"Cookie", :font_size=>40, :font_weight=>"bold", :text=>"#{dish.title}"}, :color=>"#fff"},
+                  {:angle=>0, :flags=>"layer_apply", :x=>10, :y=>10}
+                ],
+                height: 300, width: 400, crop: :fill %>
+            </div>
           </swiper-slide>
-      </swiper-container>
         <% end %>
+      </swiper-container>
+    <% end %>
   </div>
-  <% end %>
 </div>
