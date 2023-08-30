@@ -1,0 +1,27 @@
+.card-show{
+  justify-content: center;
+  background-image: src="https://img.freepik.com/free-photo/marble-texture-background-pattern_1339-7554.jpg?w=1480&t=st=1693366829~exp=1693367429~hmac=83f3bd3fbf918ecfce497b10a32e1fe2b70e9a74523d275dead14c7adea56713";
+  border: 2px solid white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-inner{
+  margin-top: 10px;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+.card-body{
+  margin-top: 10px;
+  background-color: white;
+
+}
+
+.container-show{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
