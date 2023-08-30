@@ -1,0 +1,75 @@
+body {background-image: url('https://img.freepik.com/free-photo/marble-texture-background-pattern_1339-7554.jpg?w=1480&t=st=1693366829~exp=1693367429~hmac=83f3bd3fbf918ecfce497b10a32e1fe2b70e9a74523d275dead14c7adea56713');
+// color: whitesmoke;
+}
+
+// .card-product {
+//   overflow: hidden;
+//   height: 120px;
+//   background: white;
+//   display: flex;
+//   align-items: center;
+//   margin: 20px;
+//   flex-direction: row-reverse;
+//   // box-shadow: 1px 2px 2px 3px whitesmoke;
+//   background: linear-gradient(150deg, #F5F7F6, #5CA0F2 100%);
+//   border-radius: 10px;
+// }
+
+// .card-product img {
+//   height: 100%;
+//   object-fit: cover;
+// }
+
+// .card-product h2 {
+//   font-weight: bold;
+//   margin: 0;
+// }
+
+// .card-product p {
+//   font-size: 12px;
+//   line-height: 1.4;
+//   opacity: .7;
+//   margin-bottom: 0;
+//   margin-top: 8px;
+// }
+
+// .card-product .card-product-infos {
+//   padding: 16px;
+//   font-family: 'Raleway', sans-serif;
+// }
+// .cards {
+//   display: grid;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+// .cards h1 {
+//   text-align: center;
+//   color: #F4F7FF;
+//   font-family: 'Raleway', sans-serif;
+// }
+
+.card-category {
+  background-size: cover;
+  background-position: center;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  margin: 10px;
+  width: 500px;
+  font-family: 'Raleway', sans-serif;
+}
+
+.dish {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  margin-top: 30px
+}

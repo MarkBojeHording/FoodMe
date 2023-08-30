@@ -1,47 +1,63 @@
-<%# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> %>
-
-<div class="back-button">
+<%# <div class="back-button">
+<i class="fa-solid fa-angle-left"></i>
 	<a href="#" class="label">
-
 </a>
 </div>
 
-<%# <div class="container-sm">
+<div class="back-button">
+<i class="fa-solid fa-angles-left"></i>
+	<a href="#" class="label">
+</a>
+</div>
 
-  <div class="product-details">
+<div class="back-button">
+<i class="fa-solid fa-chevron-left fa-beat" style="color: #1cabce;"></i>
+	<a href="#" class="label">
+</a>
+</div>
 
-  <h1>Toad in the hole</h1>
-  <span class="hint-star star">
-    <i class="fa fa-star" aria-hidden="true"></i>
-    <i class="fa fa-star" aria-hidden="true"></i>
-    <i class="fa fa-star" aria-hidden="true"></i>
-    <i class="fa fa-star" aria-hidden="true"></i>
-    <i class="fa fa-star-o" aria-hidden="true"></i>
-  </span>
+<div class="back-button">
+<i class="fa-sharp fa-light fa-circle-chevron-left" style="color: #9f311d;"></i>
+	<a href="#" class="label">
+</a>
 </div> %>
-
+<%#
+<div class="back-button">
+<i class="fa-sharp fa-solid fa-chevron-left fa-beat" style="color: #efeff1;"></i>
+	<a href="#" class="label">
+</a>
 </div>
 
-  <h2>Ingredients</h2>
-<div class="product-image">
 
-  <img src="https://media.istockphoto.com/id/1314976610/id/foto/kodok-di-dalam-lubang.jpg?s=612x612&w=0&k=20&c=V8ZAtH_27aFXG3fNeyOuCvbdiKVFTJdp1NW1xFHJojo=" width="150" height="150" alt="">
 
-<div class="info">
+<div class="back-button">
+<i class="fi fi-rr-angle-left"></i>
+	<a href="#" class="label">
+</a>
+</div>
+
+<div class="back-button">
+<i class="fi fi-bs-undo"></i>
+	<a href="#" class="label">
+</a>
+</div>
+
+  <div class="cards">
+  <h1>FoodMe</h1>
     <% @dishes.each do |dish| %>
-  <ul>
-    <li><strong><%= link_to '>', dish_path(dish) %><%= dish.title %></strong></li>
-    <li><strong><%= dish.description %></strong></li>
-  </ul>
-</div>
+      <%# <div class="card-product">
+          <img class="card-img-right" src="https://media.istockphoto.com/id/1314976610/id/foto/kodok-di-dalam-lubang.jpg?s=612x612&w=0&k=20&c=V8ZAtH_27aFXG3fNeyOuCvbdiKVFTJdp1NW1xFHJojo="/>
+          <div class="card-product-infos">
+            <h2><%= dish.title %><%= link_to '>', dish_path(dish)%>
+        <%# </div>
+    </div>
+  <% end %>
+<%# </div> %>
+
+<div class="dish">
+    <% @dishes.each do |dish| %>
+      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(https://media.istockphoto.com/id/1314976610/id/foto/kodok-di-dalam-lubang.jpg?s=612x612&w=0&k=20&c=V8ZAtH_27aFXG3fNeyOuCvbdiKVFTJdp1NW1xFHJojo=">
+    <%= dish.title %>
+  </div>
 <% end %>
 </div>
-
-</div>
-
-
-
-
-<%# create container
-for each dish have a card
-display each dish with relevant title and description %>
