@@ -30,7 +30,7 @@
 <div class="info">
     <% @dishes.each do |dish| %>
   <ul>
-    <li><strong><%= dish.title %></strong></li>
+    <li><strong><%= link_to '>', dish_path(dish) %><%= dish.title %></strong></li>
     <li><strong><%= dish.description %></strong></li>
   </ul>
 </div>
