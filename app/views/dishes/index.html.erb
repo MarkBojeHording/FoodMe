@@ -45,19 +45,19 @@
   <div class="cards">
   <h1>FoodMe</h1>
     <% @dishes.each do |dish| %>
-      <%# <div class="card-product">
+      <%#<div class="card-product">
           <img class="card-img-right" src="https://media.istockphoto.com/id/1314976610/id/foto/kodok-di-dalam-lubang.jpg?s=612x612&w=0&k=20&c=V8ZAtH_27aFXG3fNeyOuCvbdiKVFTJdp1NW1xFHJojo="/>
           <div class="card-product-infos">
-            <h2><%= dish.title %><%= link_to '>', dish_path(dish)%>
+            <h2><%= dish.title %><%# link_to '>', dish_path(dish)%>
         <%# </div>
     </div>
   <% end %>
-<%# </div> %>
+<%#</div> %>
 
 <div class="dish">
     <% @dishes.each do |dish| %>
       <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(https://media.istockphoto.com/id/1314976610/id/foto/kodok-di-dalam-lubang.jpg?s=612x612&w=0&k=20&c=V8ZAtH_27aFXG3fNeyOuCvbdiKVFTJdp1NW1xFHJojo=">
-    <%= dish.title %>
+    <%= dish.title %><%= link_to '>', dish_path(dish)%>
   </div>
 <% end %>
 </div>
