@@ -1,4 +1,5 @@
-body {background-image: url('https://img.freepik.com/free-photo/marble-texture-background-pattern_1339-7554.jpg?w=1480&t=st=1693366829~exp=1693367429~hmac=83f3bd3fbf918ecfce497b10a32e1fe2b70e9a74523d275dead14c7adea56713');
+body {
+  background-image: url('https://images.unsplash.com/photo-1566305977571-5666677c6e98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2745&q=80');
 }
 
 .card-category {
@@ -12,7 +13,17 @@ body {background-image: url('https://img.freepik.com/free-photo/marble-texture-b
   font-size: 24px;
   font-weight: bold;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  border-radius: 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   font-family: 'Raleway', sans-serif;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.my-swiper-container {
+  padding: 10px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  opacity: 0;
 }
