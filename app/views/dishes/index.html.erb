@@ -1,17 +1,16 @@
-<div class="back-button">
-  <i class="fa-solid fa-chevron-left fa-beat" style="color: #1cabce;"></i>
-	<a href="#" class="label">
-  </a>
-</div>
-
-
 <div class="container">
+  <div class="back-button" style="margin: 20px; font-size: 20px;">
+    <%= link_to new_user_session_path do %>
+      <button type="button" class="btn btn-dark w-100"><i class="fa-solid fa-arrow-left-long"></i></button>
+    <% end %>
+  </div>
+
   <div class="row">
     <% @dishes.each do |dish| %>
-      <swiper-container navigation="true" pagination="true" scrollbar="true" effect="coverflow">
+      <swiper-container navigation="false" class="my-swiper-container col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
         <% dish.photos.each do |photo| %>
           <swiper-slide>
-            <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3))"  alt="First slide">
+            <div class="card-category" alt="First slide">
               <%= cl_image_tag photo.key,
                 transformation: [
                   {:width=>400, :height=>300, :crop=>"fill"},

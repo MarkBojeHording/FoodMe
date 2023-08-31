@@ -46,7 +46,8 @@ menu = Menu.create!(restaurant_name: "Luigi's", user: christian)
 create_dish_with_ingredients("cheeseburger", %w[beef cheese onions ketchup], menu)
 create_dish_with_ingredients("sushi", %w[rice fish tofu], menu)
 create_dish_with_ingredients("toadinhole", %w[sausage pudding onion vegetables], menu)
-
+create_dish_with_ingredients("spaghetti puttanesca", %w[oil onion garlic tomatoes], menu)
+create_dish_with_ingredients("creamy mushroom pasta", %w[oil butter garlic cream], menu)
 
 puts "Users created: #{User.count}"
 puts "Menus created: #{Menu.count}"
