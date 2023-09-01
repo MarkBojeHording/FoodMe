@@ -2,8 +2,8 @@ class DishesController < ApplicationController
   before_action :set_dish, only: [:show]
 
    def index
-    puts "first line..."
-    @dishes = Dish.all
+    @dishes = Menu.find(params[:menu_id]).dishes
+    # image scrapey
     @results = GoogleCustomSearchApi.search("nasi goreng")
    end
 
