@@ -25,10 +25,12 @@ var video = document.querySelector('video');
 -->
 
 
-<%# <input type="file" name="image" accept="image/*" capture="environment"> %>
- <h1>Pages#home</h1>
+<%# <input type="file" name="image" accept="image/*" capture> %>
+
+ <h1>Take a photo</h1>
  <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
-    <%=f.input :photo, as: :file %>
+    <%=f.input :photo, as: :file, input_html: { class: "" } %>
+    <%# <input class="form-control file optional" type="file" name="menu[photo]" id="menu_photo" accept="image/*" capture="environment"> %>
     <%= f.button :submit %>
 <% end %>
 <%# <% <video autoplay></video> %>
