@@ -15,6 +15,8 @@ class DishesController < ApplicationController
     require 'json'
     # Step 1 - Set path to the image file, API key, and API URL.
     image_file = @menu.photo.url
+    Rails.logger.debug "url: #{image_file}"
+
     # API_KEY = 'XXXXXXXXXX' # Don't forget to protect your API key.
     api_url = "https://vision.googleapis.com/v1/images:annotate?key=#{ENV["GOOGLE_API_KEY"]}"
     # Step 2 - Set request JSON body.
@@ -85,6 +87,7 @@ class DishesController < ApplicationController
     response = connection.post('', body, "Content-Type" => "application/json")
 
     # Step 5 - Parse the response into a usable format
+    Rails.logger.debug response.body
     data_hash = JSON.parse(response.body)["responses"][0]
 
     # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
