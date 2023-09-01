@@ -9,6 +9,7 @@
   <div class="row">
     <% @dishes.each do |dish| %>
       <%= link_to dish_path(dish) do %>
+      <p><%= dish.title %></p>
         <swiper-container navigation="false" class="my-swiper-container col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
           <% dish.photos.each do |photo| %>
             <swiper-slide>
