@@ -4,7 +4,7 @@ class DishesController < ApplicationController
    def index
     puts "first line..."
     @dishes = Dish.all
-    # image scrapey
+    @results = GoogleCustomSearchApi.search("nasi goreng")
    end
 
   def text_extract
