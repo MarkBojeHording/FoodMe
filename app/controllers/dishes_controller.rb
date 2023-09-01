@@ -1,11 +1,11 @@
 class DishesController < ApplicationController
   before_action :set_dish, only: [:show]
 
-   def index
+  def index
     @dishes = Menu.find(params[:menu_id]).dishes
     # image scrapey
     @results = GoogleCustomSearchApi.search("nasi goreng")
-   end
+  end
 
   def text_extract
     @menu = Menu.new(menu_params)
