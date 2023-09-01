@@ -1,7 +1,6 @@
 .card-show{
   justify-content: center;
   background-image: src="https://img.freepik.com/free-photo/marble-texture-background-pattern_1339-7554.jpg?w=1480&t=st=1693366829~exp=1693367429~hmac=83f3bd3fbf918ecfce497b10a32e1fe2b70e9a74523d275dead14c7adea56713";
-  border: 2px solid white;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -10,17 +9,17 @@
 
 .carousel-inner{
   margin-top: 10px;
-  border: 1px solid white;
   border-radius: 10px;
 }
 
 .card-will {
-  margin-top: 10px;
+
   background-color: white;
-  transform: translateY(-60px);
+  transform: translateY(-48px);
   opacity: 0.9;
   border-radius: 20px 20px 20px 20px;
-  padding: 20px;
+  padding: 15px;
+  z-index: 1;
 }
 
 .container-show{
@@ -29,3 +28,23 @@
   align-items: center;
   margin: auto;
 }
+
+.container{
+  max-width: 390px;
+}
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: white !important;
+}
+
+// .container .swiper{
+//   --swiper-pagination-color:white;
+// }
+// .swiper-container .swiper-pagination-bullets{
+//   bottom: initial;
+//   top: 10px;
+// }
