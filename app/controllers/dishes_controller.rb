@@ -1,23 +1,10 @@
-require "open-uri"
-require "nokogiri"
-
 class DishesController < ApplicationController
   before_action :set_dish, only: [:show]
 
    def index
+    puts "first line..."
     @dishes = Dish.all
-
-    ingredient = "chocolate"
-    url = "https://www.bbcgoodfood.com/search/recipes?q=#{ingredient}"
-
-    html_file = URI.open(url).read
-    html_doc = Nokogiri::HTML.parse(html_file)
-
-    html_doc.search(".layout-md-rail__primary .card__content a").each do |element|
-      puts element.text.strip
-      puts element.attribute("href").value
-    end
-    # put some scrapey stuff here. (and then once complete, consider moving into the hehe)
+    # image scrapey
    end
 
   def text_extract
@@ -25,12 +12,86 @@ class DishesController < ApplicationController
     @menu.user = current_user
     @menu.save
 
+    require 'json'
+    # Step 1 - Set path to the image file, API key, and API URL.
+    image_file = @menu.photo.url
+    # API_KEY = 'XXXXXXXXXX' # Don't forget to protect your API key.
+    api_url = "https://vision.googleapis.com/v1/images:annotate?key=#{ENV["GOOGLE_API_KEY"]}"
+    # Step 2 - Set request JSON body.
+    body = "{
+      'requests': [
+        {
+          'features': [
+            {
+              'maxResults': 50,
+              'type': 'LANDMARK_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'FACE_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'OBJECT_LOCALIZATION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'LOGO_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'LABEL_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'model': 'builtin/latest',
+              'type': 'DOCUMENT_TEXT_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'SAFE_SEARCH_DETECTION'
+            },
+            {
+              'maxResults': 50,
+              'type': 'IMAGE_PROPERTIES'
+            },
+            {
+              'maxResults': 50,
+              'type': 'CROP_HINTS'
+            }
+          ],
+          'image': {
+            'source': {
+              'imageUri': '#{image_file}'
+            }
+          },
+          'imageContext': {
+            'cropHintsParams': {
+              'aspectRatios': [
+                0.8,
+                1,
+                1.2
+              ]
+            }
+          }
+        }
+      ]
+    }"
+    # Step 4 - Send request using Faraday
+    connection = Faraday.new(
+      url: api_url,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+    response = connection.post('', body, "Content-Type" => "application/json")
+
+    # Step 5 - Parse the response into a usable format
+    data_hash = JSON.parse(response.body)["responses"][0]
+
     # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
     # and so the following code will take the entire block and *hopefully* return the
     # meal title.
-    file = File.open("./test/sample_data/test_two.json") # needs updating with the API json response
-    data_hash = JSON.load file
-    # cloud vision api json search query to extract text
+
+    # Step 6 - filter the response to get out the useful stuff
     filtered_json_response = data_hash["fullTextAnnotation"]["pages"][0]["blocks"].map { |b| b["paragraphs"].map { |p| p["words"].map { |w| w["symbols"].map { |s| s["text"] }.join}} }.join
 
     if filtered_json_response.scan(/[A-Z]/).size < 500
@@ -77,7 +138,7 @@ class DishesController < ApplicationController
   end
 
   def menu_params
-    params.require(:menu).permit(:restaurant_name, :photos [])
+    params.require(:menu).permit(:restaurant_name, :photo )
   end
 
   def tidy_up(meals)
