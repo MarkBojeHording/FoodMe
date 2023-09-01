@@ -11,10 +11,11 @@
       <%= link_to dish_path(dish) do %>
       <p><%= dish.title %></p>
         <swiper-container navigation="false" class="my-swiper-container col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
-          <% dish.photos.each do |photo| %>
+            <% @results.items.each do |item| %>
             <swiper-slide>
+
               <div class="card-category" alt="First slide">
-                <%= cl_image_tag photo.key,
+                <%= cl_image_tag item.pagemap.metatags.first["og:image"],
                   transformation: [
                     {:width=>400, :height=>300, :crop=>"fill"},
                     {:overlay=>{:font_family=>"Cookie", :font_size=>40, :font_weight=>"bold", :text=>"#{dish.title}"}, :color=>"#fff"},
@@ -29,3 +30,8 @@
     <% end %>
   </div>
 </div>
+
+
+<!--  <% @results.items.each do |item| %>
+<img src= "<%= item.pagemap.metatags.first["og:image"] %>" alt="">
+  <% end %> -->

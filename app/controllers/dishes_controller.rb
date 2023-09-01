@@ -4,6 +4,7 @@ class DishesController < ApplicationController
    def index
     @dishes = Menu.find(params[:menu_id]).dishes
     # image scrapey
+    @results = GoogleCustomSearchApi.search("nasi goreng")
    end
 
   def text_extract
