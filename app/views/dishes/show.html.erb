@@ -1,5 +1,40 @@
 
 <%# <meta name="show" content="width=device-width, initial-scale=1.0"> %>
+
+
+<div class="container" style="max-width: 390px;">
+  <div class="vh-100 d-flex flex-column justify-content-center">
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <div class="carousel-inner" data-bs-interval='5000' data-bs-touch='true' data-bs-ride='carousel'>
+        <swiper-container navigation="false" class="container" pagination="true" scrollbar="false" effect="coverflow"
+          style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;   --swiper-pagination-top: 8px;">
+          <% @dish.photos.each do |photo| %>
+            <swiper-slide>
+              <div class="card-show" alt="First slide">
+                <%= cl_image_tag photo.key,
+                  height: 620, width: 390, crop: :fill %>
+              </div>
+            </swiper-slide>
+          <% end %>
+        </swiper-container>
+      </div>
+    </div>
+    <div class="card-will">
+      <h3 class="font-weight-bold d-flex justify-content-center"><%= @dish.title %></h3>
+      <p class="card-text"><strong>Ingredients: </strong><%= @dish.description %></p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!--
 <div class="container" style="max-width: 390px;">
   <div class="vh-100 d-flex flex-column justify-content-center">
     <div id="carouselExampleIndicators" class="carousel slide">
@@ -28,7 +63,5 @@
     </div>
     <div class="card-will">
       <h3 class="font-weight-bold d-flex justify-content-center"><%= @dish.title %></h3>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-</div>
+      <p class="card-text"><strong>Ingredients: </strong><%= @dish.description %></p>
+-->

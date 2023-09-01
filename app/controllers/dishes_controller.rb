@@ -77,7 +77,7 @@ class DishesController < ApplicationController
   end
 
   def menu_params
-    params.require(:menu).permit(:restaurant_name, :photos [])
+    params.require(:menu).permit(:restaurant_name, :photo)
   end
 
   def tidy_up(meals)
