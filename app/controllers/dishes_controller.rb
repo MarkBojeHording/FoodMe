@@ -6,17 +6,7 @@ class DishesController < ApplicationController
 
    def index
     @dishes = Dish.all
-
-    ingredient = "chocolate"
-    url = "https://www.bbcgoodfood.com/search/recipes?q=#{ingredient}"
-
-    html_file = URI.open(url).read
-    html_doc = Nokogiri::HTML.parse(html_file)
-
-    html_doc.search(".layout-md-rail__primary .card__content a").each do |element|
-      puts element.text.strip
-      puts element.attribute("href").value
-    end
+    @results = GoogleCustomSearchApi.search("nasi goreng")
     # put some scrapey stuff here. (and then once complete, consider moving into the hehe)
    end
 
