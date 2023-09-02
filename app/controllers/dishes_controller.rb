@@ -1,11 +1,28 @@
 class DishesController < ApplicationController
   before_action :set_dish, only: [:show]
 
-   def index
-    @dishes = Menu.find(params[:menu_id]).dishes
+  def index
+    @dishes = Menu.find(params[:menu_id]).dishes.first(3)
     # image scrapey
-    @results = GoogleCustomSearchApi.search("nasi goreng")
-   end
+    @dishes.each do |dish|
+      @results = GoogleCustomSearchApi.search(dish.title)
+      @results.items.first(5).each do |item|
+        if item.pagemap.metatags.first["og:image"]
+        end
+        if image?(item.pagemap.metatags.first["og:image"])
+        end
+      end
+    end
+  end
+
+
+    def image?(url)
+      if url.end_with?(".png") || url.end_with?(".jpg") || url.end_with?(".jpeg") || url.end_with?(".")
+        return true
+      else
+        return false
+      end
+    end
 
   def text_extract
     @menu = Menu.new(menu_params)
