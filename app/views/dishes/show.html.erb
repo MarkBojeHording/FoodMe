@@ -1,24 +1,28 @@
 
-<div class="container" style="max-width: 390px;">
-  <div class="vh-100 d-flex flex-column justify-content-center">
-    <div id="carouselExampleIndicators" class="carousel slide">
-      <div class="carousel-inner" data-bs-interval='5000' data-bs-touch='true' data-bs-ride='carousel'>
-        <swiper-container navigation="false" class="container" pagination="true" scrollbar="false" effect="coverflow"
-          style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;   --swiper-pagination-top: 8px;">
-          <% @dish.dish_photos.each do |dish_photo| %>
-            <swiper-slide>
-              <div class="card-show" alt="First slide">
-                <%= image_tag dish_photo.url,
-                crop: :fill %>
-              </div>
-            </swiper-slide>
-          <% end %>
-        </swiper-container>
+<swiper-container navigation="false" pagination="true" scrollbar="false" effect="coverflow"
+  style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;   --swiper-pagination-top: 8px;">
+  <% @dish.dish_photos.each do |dish_photo| %>
+    <swiper-slide>
+      <div class="card-dish" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= image_path dish_photo.url %>)">
+        <%= @dish.title %>
       </div>
+    </swiper-slide>
+  <% end %>
+</swiper-container>
+
+<div class="card-show">
+  <div class="card bg-dark text-white">
+    <div class="card-header">
+      Ingredients
     </div>
-    <div class="card-will">
-      <h3 class="font-weight-bold d-flex justify-content-center"><%= @dish.title %></h3>
-      <p class="card-text"><strong>Ingredients: </strong><%= @dish.description %></p>
+  <div class="container">
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p><%= @dish.description %></p>
+        <p><%= @dish.description %></p>
+        <p><%= @dish.description %></p>
+      </blockquote>
+      </div>
     </div>
   </div>
 </div>

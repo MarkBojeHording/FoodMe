@@ -1,12 +1,12 @@
 body {
   background-image: url("background.jpg"), url("invertbackground.jpg");
   background-repeat: no-repeat;
-  display: cover;
+  background-position: top, center, bottom;
 }
 
 .card-category {
   background-size: cover;
-  background-position: center;
+  background-position: center, repeat-x;
   height: 180px;
   display: flex;
   justify-content: center;
@@ -28,4 +28,11 @@ body {
 .swiper-button-next,
 .swiper-button-prev {
   opacity: 0;
+}
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: white !important;
 }
