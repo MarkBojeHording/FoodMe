@@ -29,10 +29,10 @@ var video = document.querySelector('video');
 
 <div class='general-home container'>
   <div class="title">
-    <h1><strong>Food Me</strong></h1>
+    <h1>Food me</h1>
   </div>
   <div class="logo">
-    <img src='' class='logo-pic'>
+    <%= image_tag 'logo-foodme.png', class: 'logo-pic' %>
   </div>
   <div class='import'>
     <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
