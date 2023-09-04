@@ -1,7 +1,6 @@
 body {
-  background-image: url("background.jpg"), url("invertbackground.jpg");
-  background-repeat: no-repeat;
-  background-position: top, center, bottom;
+  background: url("background.jpg") no-repeat center fixed;
+  background-size: cover;
 }
 
 .card-category {

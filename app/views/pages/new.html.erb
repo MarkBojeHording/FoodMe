@@ -27,10 +27,28 @@ var video = document.querySelector('video');
 
 <%# <input type="file" name="image" accept="image/*" capture> %>
 
- <h1>Take a photo</h1>
- <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
-    <%=f.input :photo, as: :file, input_html: { class: "" } %>
-    <%# <input class="form-control file optional" type="file" name="menu[photo]" id="menu_photo" accept="image/*" capture="environment"> %>
-    <%= f.button :submit %>
-<% end %>
-<%# <% <video autoplay></video> %>
+<div class='general-home container'>
+  <div class="title">
+    <h1>Food me</h1>
+  </div>
+  <div class="logo">
+    <%= image_tag 'logo-foodme.png', class: 'logo-pic' %>
+  </div>
+  <div class='d-flex justify-content-center'>
+    <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
+            <label id="upload">
+            <%= image_tag src="upload.svg"%>
+              <span style="display:none;">
+                <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2" } %>
+              </span>
+            </label>
+            <br>
+            <label>
+            <button class="btn btn-primary" id="upload-submit">Food me!</button>
+              <span style="display:none;">
+                <%= f.button :submit, class:'create-menu' %>
+              </span>
+            </label>
+        <% end %>
+  </div>
+</div>
