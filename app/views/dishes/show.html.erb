@@ -1,4 +1,11 @@
 
+<div class="show">
+  <div class="back-button" style="margin: 20px 20px 0; font-size: 20px;">
+    <%= link_to :back do %>
+    <i class="back fa-solid fa-arrow-left"></i>
+    <% end %>
+  </div>
+
 <swiper-container navigation="false" pagination="true" scrollbar="false" effect="coverflow"
   style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;   --swiper-pagination-top: 8px;">
   <% @dish.dish_photos.each do |dish_photo| %>
@@ -11,7 +18,7 @@
 </swiper-container>
 
 <div class="card-show">
-  <div class="card bg-dark text-white">
+  <div class="darkone bg-dark text-white">
     <div class="card-header">
       Ingredients
     </div>
@@ -26,3 +33,5 @@
     </div>
   </div>
 </div>
+
+<% console %>

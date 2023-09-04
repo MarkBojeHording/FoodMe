@@ -1,14 +1,14 @@
-<div class="show">
   <div class="back-button" style="margin: 20px 20px 0; font-size: 20px;">
     <%= link_to new_user_session_path do %>
     <i class="fa-solid fa-arrow-left"></i>
     <% end %>
   </div>
 
+
   <div class="row">
     <% @dishes.each do |dish| %>
       <%= link_to dish_path(dish), class: "text-decoration-none" do %>
-        <swiper-container navigation="false" class="my-swiper-container col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
+        <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
           <% dish.dish_photos.each do |dish_photo| %>
             <swiper-slide class="swip-slid">
               <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= image_path dish_photo.url %>)">
