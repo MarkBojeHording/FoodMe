@@ -34,10 +34,21 @@ var video = document.querySelector('video');
   <div class="logo">
     <img src='' class='logo-pic'>
   </div>
-  <div class='import'>
+  <div class='d-flex justify-content-center'>
     <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
-            <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2" } %>
-            <%= f.button :submit, class:'create-menu' %>
+            <label id="upload">
+            <%= image_tag src="upload.svg"%>
+              <span style="display:none;">
+                <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2" } %>
+              </span>
+            </label>
+            <br>
+            <label>
+            <button class="btn btn-primary" id="upload-submit">Food me!</button>
+              <span style="display:none;">
+                <%= f.button :submit, class:'create-menu' %>
+              </span>
+            </label>
         <% end %>
   </div>
 </div>
