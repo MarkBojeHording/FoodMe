@@ -35,17 +35,17 @@ var video = document.querySelector('video');
     <h1>Food me</h1>
     <p>Take a pic and see the dish</p>
   </div>
-  <div class='d-flex justify-content-center'>
+  <div class='d-flex justify-content-center' data-controller="upload">
     <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
             <label id="upload">
             <%= image_tag src="upload.svg"%>
               <span style="display:none;">
-                <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2" } %>
+                <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2", data: {action: "change->upload#changed"} } %>
               </span>
             </label>
             <br>
             <label>
-            <button class="btn btn-primary" id="upload-submit">Food me! (this button should be invisible until file uploaded...)</button>
+            <button class="btn btn-primary d-none" id="upload-submit" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
               <span style="display:none;">
                 <%= f.button :submit, class:'create-menu' %>
               </span>
