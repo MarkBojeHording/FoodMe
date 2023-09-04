@@ -14,17 +14,19 @@ legend ~ div.form-check:first-of-type {
 
   img {
     border: dashed;
-    border-color: whitesmoke;
-    border-width: 2px;
-    padding: 8px;
+    border-color: #aaa;
+    border-width: 4px;
+    padding: 50px;
     margin: -8px;
+    margin-top: 216px;
+    width: 200px;
+    border-radius: 16px;
 
     &:hover {
       border-color: rgb(46, 134, 250);
       transition: 300ms;
     }
   }
-
 }
 
 #upload-submit {
