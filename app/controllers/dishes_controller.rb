@@ -2,9 +2,8 @@ class DishesController < ApplicationController
   before_action :set_dish, only: [:show]
 
   def index
-    @dishes = Menu.find(params[:menu_id]).dishes
-    # image scrapey
-    @results = GoogleCustomSearchApi.search("nasi goreng")
+    @menu = Menu.find(params[:menu_id])
+    @dishes = Dish.includes(:dish_photos).where(menu: @menu)
   end
 
   def text_extract
@@ -126,7 +125,12 @@ class DishesController < ApplicationController
       tidy_up(meals)
       meals.uniq!
     end
-    meals.each { |m| Dish.create!(title: m, menu: @menu) } # this line creates a new dish for each of the found meal titles
+    meals.each do |m|
+      dish = Dish.create!(title: m, menu: @menu) # this line creates a new dish for each of the found meal titles
+      scrape_image(dish)
+    end
+
+
     redirect_to menu_dishes_path(@menu)
   end
 
@@ -135,6 +139,21 @@ class DishesController < ApplicationController
   end
 
   private
+
+  def check_url(url)
+    url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
+  end
+
+  def scrape_image(dish)
+    result = GoogleCustomSearchApi.search(dish.title)
+    result.items.each do |photo|
+      if (photo.key? "pagemap") && (photo.pagemap.key? "metatags")
+        DishPhoto.create(dish: dish, url: photo.pagemap.metatags.first["og:image"]) if check_url(photo.pagemap.metatags.first["og:image"])
+      elsif (photo.key? "pagemap") && (photo.pagemap.key? "cse_image")
+        DishPhoto.create(dish: dish, url: photo.pagemap.cse_image[0].src) if check_url(photo.pagemap.cse_image[0].src)
+      end
+    end
+  end
 
   def set_dish
     @dish = Dish.find(params[:id])

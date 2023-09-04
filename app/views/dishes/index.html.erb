@@ -6,21 +6,15 @@
     <% end %>
   </div>
 -->
+
   <div class="row">
     <% @dishes.each do |dish| %>
-      <%= link_to dish_path(dish) do %>
+      <%= link_to dish_path(dish), class: "text-decoration-none" do %>
         <swiper-container navigation="false" class="my-swiper-container col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
-            <% @results.items.each do |item| %>
-            <swiper-slide>
-
-              <div class="card-category" alt="First slide">
-                <%= image_tag item.pagemap.metatags.first["og:image"],
-                  transformation: [
-                    {:width=>400, :height=>300, :crop=>"fill"},
-                    {:overlay=>{:font_family=>"Cookie", :font_size=>40, :font_weight=>"bold", :text=>"#{dish.title}"}, :color=>"#fff"},
-                    {:angle=>0, :flags=>"layer_apply", :x=>10, :y=>10}
-                  ],
-                  height: 400, width: 300, crop: :fill %>
+          <% dish.dish_photos.each do |dish_photo| %>
+            <swiper-slide class="swip-slid">
+              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= image_path dish_photo.url %>)">
+                <%= dish.title %>
               </div>
             </swiper-slide>
           <% end %>
