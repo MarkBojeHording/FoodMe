@@ -141,7 +141,7 @@ class DishesController < ApplicationController
   private
 
   def check_url(url)
-    url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
+  url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
   end
 
   def scrape_image(dish)
