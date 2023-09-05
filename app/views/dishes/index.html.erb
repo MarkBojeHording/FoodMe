@@ -4,14 +4,19 @@
     <% end %>
   </div>
 
-
-  <div class="row">
+<div data-controller="fetch-dishes" data-fetch-dishes-menu-dishes-value = <%= (@menu.dishes.pluck(:id)).to_json %> >
+  <div class="row" data-fetch-dishes-target="swipers">
+  </div>
+</div>
+</div>
+<!-- <div data-controller="fetch-dishes" data-fetch-dishes-menu-dishes-value = <%= (@menu.dishes.pluck(:id)).to_json %> >
+  <div class="row" data-fetch-dishes-target="swipers">
     <% @dishes.each do |dish| %>
       <%= link_to dish_path(dish), class: "text-decoration-none" do %>
         <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
           <% dish.dish_photos.each do |dish_photo| %>
             <swiper-slide class="swip-slid">
-              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= image_path dish_photo.url %>)">
+              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= image_path dish_photo.url %>')">
                 <%= dish.title %>
               </div>
             </swiper-slide>
@@ -21,3 +26,4 @@
     <% end %>
   </div>
 </div>
+</div> -->

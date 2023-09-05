@@ -55,7 +55,7 @@ gem "simple_form", github: "heartcombo/simple_form"
 gem "cloudinary"
 gem "google_custom_search_api" #Google Search Gem
 gem "faraday"
-
+gem 'easy_translate'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
