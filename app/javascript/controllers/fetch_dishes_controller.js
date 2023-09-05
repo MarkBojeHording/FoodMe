@@ -11,25 +11,27 @@ export default class extends Controller {
     this.menuDishesValue.forEach(dish => {
       fetch(`${window.location.origin}/image_search?dish_id=${dish}`)
         .then(response => response.json())
-        .then((data) => {console.log(data)});
+        .then((data) => {
 
-      let photoHTML = "";
-      data.photo.forEach ((photo) => {
-        photoHTML +=
-        `<swiper-slide class="swip-slid">
-          <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${photo[:url]})">
-            ${data.dish[:title]}
-          </div>
-        </swiper-slide>`
-      })
+          let photoHTML = "";
+          data.photo.forEach ((photo) => {
+            photoHTML +=
+            `<swiper-slide class="swip-slid">
+              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${photo["url"]})">
+                ${data.dish["title"]}
+              </div>
+            </swiper-slide>`
+          })
 
-      this.swipersTarget.insertAdjacentHTML("beforeend",
-      `<a class="text-decoration-none" href="/dishes/${data.dish[:id]}">
-        <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
-          ${photoHTML}
-        </swiper-container>
-      </a>`
-      )
+          this.swipersTarget.insertAdjacentHTML("beforeend",
+          `<a class="text-decoration-none" href="/dishes/${data.dish["id"]}">
+            <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
+              ${photoHTML}
+            </swiper-container>
+          </a>`
+          )
+        });
+
     });
   }
 }
