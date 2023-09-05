@@ -27,34 +27,36 @@ var video = document.querySelector('video');
 
 <%# <input type="file" name="image" accept="image/*" capture> %>
 
-<div class='general-home container'>
+<div class='general-home container' data-controller="notification-subscription" data-notification-subscription-user-id-value="<%= current_user.id %>">
   <div class="logo mt-5 d-flex justify-content-center">
     <%= image_tag 'logo-foodme.png', class: 'logo-pic' %>
   </div>
   <div class="title">
     <h1>Food me</h1>
     <p>Take a pic and see the dish</p>
+    <br>
+    <p data-notification-subscription-target='message'></p>
   </div>
   <div class='d-flex flex-column align-items-center justify-content-center' data-controller="upload">
     <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
-            <label id="upload">
-            <%= image_tag src="upload.svg"%>
-              <span style="display:none;">
-                <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2", data: {action: "change->upload#changed"} } %>
-              </span>
-            </label>
-            <br>
-            <label>
-            <button class="btn btn-primary d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
-              <span style="display:none;">
-                <%= f.button :submit, class:'create-menu' %>
-              </span>
-              <br />
-            </label>
-        <% end %>
-        <label>
-          <span data-upload-target="loader" class="spinner d-none text-white fas fa-spinner fa-spin"></span>
-        </label>
+      <label id="upload">
+      <%= image_tag src="upload.svg"%>
+        <span style="display:none;">
+          <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2", data: {action: "change->upload#changed"} } %>
+        </span>
+      </label>
+      <br>
+      <label>
+        <button class="btn btn-primary d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
+        <span style="display:none;">
+          <%= f.button :submit, class:'create-menu' %>
+        </span>
+        <br />
+      </label>
+    <% end %>
+    <label>
+      <span data-upload-target="loader" class="spinner d-none text-white fas fa-spinner fa-spin"></span>
+    </label>
     <!--div class="progress d-none" data-upload-target="loader">
       <div class="color"></div>
     </div-->

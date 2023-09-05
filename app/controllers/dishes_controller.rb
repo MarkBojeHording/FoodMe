@@ -16,6 +16,12 @@ class DishesController < ApplicationController
     @menu = Menu.new(menu_params)
     @menu.user = current_user
     @menu.save
+    NotificationChannel.broadcast_to(
+      current_user,
+      "Images Uploaded"
+    )
+
+    # flash.now[:notice] = "extracting the text "
 
     require 'json'
     # Step 1 - Set path to the image file, API key, and API URL.
@@ -143,7 +149,10 @@ class DishesController < ApplicationController
         translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
       end
       dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
-      scrape_image(dish)
+      NotificationChannel.broadcast_to(
+      current_user,
+      "#{dish.title} is added"
+      )
     end
     redirect_to menu_dishes_path(@menu)
   end
