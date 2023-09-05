@@ -6,6 +6,10 @@ class DishesController < ApplicationController
     @dishes = Dish.includes(:dish_photos).where(menu: @menu)
   end
 
+  def translate
+
+  end
+
   def text_extract
     @menu = Menu.new(menu_params)
     @menu.user = current_user
@@ -89,14 +93,18 @@ class DishesController < ApplicationController
     Rails.logger.debug response.body
     data_hash = JSON.parse(response.body)["responses"][0]
 
+    # if EasyTranslate.detect('en')
+    # filtered_json_response
+    # else EasyTranslate.translate(data_hash)
+    # filtered_json_response = EasyTranslate.translate(data_hash)
+
     # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
     # and so the following code will take the entire block and *hopefully* return the
     # meal title.
 
     # Step 6 - filter the response to get out the useful stuff
     filtered_json_response = data_hash["fullTextAnnotation"]["pages"][0]["blocks"].map { |b| b["paragraphs"].map { |p| p["words"].map { |w| w["symbols"].map { |s| s["text"] }.join}} }.join
-
-    if filtered_json_response.scan(/[A-Z]/).size < 500
+    if filtered_json_response.scan(/[A-Z]/).size < 300
       text = filtered_json_response.split(".")
       meals = text.map do |t|
 
@@ -125,8 +133,14 @@ class DishesController < ApplicationController
       tidy_up(meals)
       meals.uniq!
     end
+
     meals.each do |m|
-      dish = Dish.create!(title: m, menu: @menu) # this line creates a new dish for each of the found meal titles
+      language = data_hash["textAnnotations"].first["locale"]
+      if language != 'en'
+        EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
+        translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
+      end
+      dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
       scrape_image(dish)
     end
 
@@ -141,7 +155,7 @@ class DishesController < ApplicationController
   private
 
   def check_url(url)
-  url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
+    url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
   end
 
   def scrape_image(dish)
