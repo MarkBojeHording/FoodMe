@@ -4,6 +4,8 @@ class DishesController < ApplicationController
   def index
     @menu = Menu.find(params[:menu_id])
     @dishes = Dish.includes(:dish_photos).where(menu: @menu)
+
+   # scrape_image(dish) <-- have this fetched for each dish in @menu in a js.
   end
 
   def translate
@@ -143,13 +145,16 @@ class DishesController < ApplicationController
       dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
       scrape_image(dish)
     end
-
-
     redirect_to menu_dishes_path(@menu)
   end
 
-  def show
+  def image_search
+    dish = Dish.find(params["dish_id"])
+    scrape_image(dish) if dish.dish_photos.count <= 0
+    render json: { dish: Dish.find(params["dish_id"]), photo: Dish.find(params["dish_id"]).dish_photos }
+  end
 
+  def show
   end
 
   private

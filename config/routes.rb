@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: "pages#new"
   post "/text_extract", to: "dishes#text_extract"
   get '/search' => 'search#index'
+  get "/image_search", to: "dishes#image_search"
   # get "show", to: "dishes#show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
