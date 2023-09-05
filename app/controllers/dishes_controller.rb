@@ -10,6 +10,12 @@ class DishesController < ApplicationController
     @menu = Menu.new(menu_params)
     @menu.user = current_user
     @menu.save
+    NotificationChannel.broadcast_to(
+      current_user,
+      "Images Uploaded"
+    )
+
+    # flash.now[:notice] = "extracting the text "
 
     require 'json'
     # Step 1 - Set path to the image file, API key, and API URL.
@@ -127,6 +133,10 @@ class DishesController < ApplicationController
     end
     meals.each do |m|
       dish = Dish.create!(title: m, menu: @menu) # this line creates a new dish for each of the found meal titles
+      NotificationChannel.broadcast_to(
+        current_user,
+        "#{dish.title} is added"
+      )
       scrape_image(dish)
     end
 
