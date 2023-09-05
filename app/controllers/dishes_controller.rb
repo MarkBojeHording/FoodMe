@@ -5,7 +5,7 @@ class DishesController < ApplicationController
     @menu = Menu.find(params[:menu_id])
     @dishes = Dish.includes(:dish_photos).where(menu: @menu)
 
-   # scrape_image(dish) <-- have this fetched for each dish in @menu in a js.
+  # scrape_image(dish) <-- have this fetched for each dish in @menu in a js.
   end
 
   def translate
@@ -101,11 +101,6 @@ class DishesController < ApplicationController
     Rails.logger.debug response.body
     data_hash = JSON.parse(response.body)["responses"][0]
 
-    # if EasyTranslate.detect('en')
-    # filtered_json_response
-    # else EasyTranslate.translate(data_hash)
-    # filtered_json_response = EasyTranslate.translate(data_hash)
-
     # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
     # and so the following code will take the entire block and *hopefully* return the
     # meal title.
@@ -144,13 +139,15 @@ class DishesController < ApplicationController
 
     meals.each do |m|
       language = data_hash["textAnnotations"].first["locale"]
-      if language != 'en'
+      if language == 'en'
+        translated_menu = m
+      else
         EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
         translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
       end
       dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
       NotificationChannel.broadcast_to(
-      current_user,
+        current_user,
       "#{dish.title} is added"
       )
     end
