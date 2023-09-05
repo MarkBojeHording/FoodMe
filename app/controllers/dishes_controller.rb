@@ -135,7 +135,7 @@ class DishesController < ApplicationController
 
   def image_search
     dish = Dish.find(params["dish_id"])
-    scrape_image(dish)
+    scrape_image(dish) if dish.dish_photos.count <= 0
     render json: { dish: Dish.find(params["dish_id"]), photo: Dish.find(params["dish_id"]).dish_photos }
   end
 
