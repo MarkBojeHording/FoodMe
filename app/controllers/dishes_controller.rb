@@ -13,12 +13,20 @@ class DishesController < ApplicationController
   end
 
   def text_extract
+
+    NotificationChannel.broadcast_to(
+      current_user,
+      { message: "--> Uploading menu 📥 <--" }
+    )
     @menu = Menu.new(menu_params)
     @menu.user = current_user
     @menu.save
     NotificationChannel.broadcast_to(
       current_user,
-      "Images Uploaded"
+      {
+        message: "--> Analysing menu 🤓 <--",
+        burgerShow: true
+      }
     )
 
     # flash.now[:notice] = "extracting the text "
@@ -124,6 +132,10 @@ class DishesController < ApplicationController
       # result = JSON.parse(resp.results.first.content)
       eval(resp.results.first.content)
     end
+    NotificationChannel.broadcast_to(
+      current_user,
+      { message: "--> Dishes found! 🤤 <--" }
+    )
 
     meals_and_descriptions = open_ai(filtered_json_response)
     meals = meals_and_descriptions.map { |r| r[:meal] }
@@ -171,7 +183,7 @@ class DishesController < ApplicationController
       dish = Dish.create!(title: translated_menu, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
       NotificationChannel.broadcast_to(
         current_user,
-      "#{dish.title} is added"
+        { message: "#{dish.title} is added" }
       )
     end
     redirect_to menu_dishes_path(@menu)

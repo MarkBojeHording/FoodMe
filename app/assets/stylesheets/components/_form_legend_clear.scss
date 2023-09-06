@@ -16,10 +16,9 @@ legend ~ div.form-check:first-of-type {
     border: dashed;
     border-color: #aaa;
     border-width: 4px;
-    padding: 50px;
-    margin: -8px;
-    margin-top: 200px;
-    width: 200px;
+    padding: 40px;
+    // margin: -30px;
+    width: 180px;
     border-radius: 16px;
 
     &:hover {
@@ -32,6 +31,7 @@ legend ~ div.form-check:first-of-type {
 #upload-submit {
   left: 0;
   right: 0;
+  bottom: 100px;
   margin: 0 auto;
   position: absolute;
   width: 100px;

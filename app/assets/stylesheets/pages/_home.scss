@@ -38,7 +38,11 @@ p {
 }
 .general-home{
   width: 390px;
-  height: 844px;
+  height: 100vh;
+  padding: 48px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   // loader/progress css
   // position: absolute;
   // top: 50%;
