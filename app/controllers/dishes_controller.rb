@@ -100,44 +100,67 @@ class DishesController < ApplicationController
     # Step 5 - Parse the response into a usable format
     Rails.logger.debug response.body
     data_hash = JSON.parse(response.body)["responses"][0]
-
     # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
     # and so the following code will take the entire block and *hopefully* return the
     # meal title.
 
     # Step 6 - filter the response to get out the useful stuff
     filtered_json_response = data_hash["fullTextAnnotation"]["pages"][0]["blocks"].map { |b| b["paragraphs"].map { |p| p["words"].map { |w| w["symbols"].map { |s| s["text"] }.join}} }.join
-    if filtered_json_response.scan(/[A-Z]/).size < 300
-      text = filtered_json_response.split(".")
-      meals = text.map do |t|
 
-        text_split = t.split(/[A-Z]/) # separates into words using capitalised letters as word split point, until next end.
-        text_scan = t.scan(/[A-Z]/)
-        i = 0
-        string = ""
-        text_scan.count.times do
-          string += text_scan[i]
-          string += text_split[i + 1]
-          string += " "
-          i += 1
-        end
-
-        pattern = / ?[A-Z].+/
-        string.split("\n").size > 1 ? last_string = string.split("\n") : last_string = string.split # checks if blocks are separated by new lines or by spaces
-        meal_name = last_string.map do |current_index|
-          current_index if pattern.match?(current_index) && current_index.split[0].size < 15 && current_index.split[0].size > 1 # map the current item if conditions are matched (i.e. its a menu item)
-        end
-        meal_name.join # returns the single joined meal name to be mapped into meals
-      end
-      tidy_up(meals)
-    else
-      meals = filtered_json_response.split(/[^A-Z]/)
-      meals.map!(&:downcase)
-      tidy_up(meals)
-      meals.uniq!
+    #OpenAI
+    def open_ai(filtered_json_response)
+      require 'openai_chatgpt'
+      client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
+      resp = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"]).completions(
+        model: "gpt-3.5-turbo",
+        messages: [
+        # { role: "user", content: "find all of the dishes and separate all of the meals with their descriptions into an array: #{filtered_json_response},
+        { role: "user", content: "find all of the meals and separate them from the text in an array of hashes, with their respective descriptions: #{filtered_json_response},
+            format: 'json'" }
+        ]
+      )
+      # raise
+      # puts resp
+      # result = JSON.parse(resp.results.first.content)
+      eval(resp.results.first.content)
     end
 
-    meals.each do |m|
+    meals_and_descriptions = open_ai(filtered_json_response)
+    meals = meals_and_descriptions.map { |r| r[:meal] }
+    descriptions = meals_and_descriptions.map { |r| r[:description] }
+
+    # old meal name extraction method
+    # if filtered_json_response.scan(/[A-Z]/).size < 300
+    #   text = filtered_json_response.split(".")
+    #   meals = text.map do |t|
+
+    #     text_split = t.split(/[A-Z]/) # separates into words using capitalised letters as word split point, until next end.
+    #     text_scan = t.scan(/[A-Z]/)
+    #     i = 0
+    #     string = ""
+    #     text_scan.count.times do
+    #       string += text_scan[i]
+    #       string += text_split[i + 1]
+    #       string += " "
+    #       i += 1
+    #     end
+
+    #     pattern = / ?[A-Z].+/
+    #     string.split("\n").size > 1 ? last_string = string.split("\n") : last_string = string.split # checks if blocks are separated by new lines or by spaces
+    #     meal_name = last_string.map do |current_index|
+    #       current_index if pattern.match?(current_index) && current_index.split[0].size < 15 && current_index.split[0].size > 1 # map the current item if conditions are matched (i.e. its a menu item)
+    #     end
+    #     meal_name.join # returns the single joined meal name to be mapped into meals
+    #   end
+    #   tidy_up(meals)
+    # else
+    #   meals = filtered_json_response.split(/[^A-Z]/)
+    #   meals.map!(&:downcase)
+    #   tidy_up(meals)
+    #   meals.uniq!
+    # end
+
+    meals.each_with_index do |m, i|
       language = data_hash["textAnnotations"].first["locale"]
       if language == 'en'
         translated_menu = m
@@ -145,7 +168,7 @@ class DishesController < ApplicationController
         EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
         translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
       end
-      dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
+      dish = Dish.create!(title: translated_menu, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
       NotificationChannel.broadcast_to(
         current_user,
       "#{dish.title} is added"
