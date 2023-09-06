@@ -72,6 +72,7 @@
 
 .card-header {
   text-align: center;
+  padding-top: 16px;
 }
 
 .card-show {
@@ -80,7 +81,9 @@
 }
 
 .darkone {
-  height: 200px;
+  height: 300px;
+  border-radius: 16px;
+  overflow: auto;
 }
 
 .back {
