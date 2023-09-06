@@ -114,20 +114,27 @@ class DishesController < ApplicationController
       resp = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"]).completions(
         model: "gpt-3.5-turbo",
         messages: [
-        # { role: "user", content: "find all of the dishes and separate all of the meals with their descriptions into an array: #{filtered_json_response},
         { role: "user", content: "find all of the meals and separate them from the text in an array of hashes, with their respective descriptions: #{filtered_json_response},
             format: 'json'" }
         ]
       )
-      # raise
-      # puts resp
-      # result = JSON.parse(resp.results.first.content)
-      eval(resp.results.first.content)
+
+      if eval(resp.results.first.content)
+        ["eval", eval(resp.results.first.content)]
+      else
+        ["json", JSON.parse(resp.results.first.content)]
+      end
     end
 
     meals_and_descriptions = open_ai(filtered_json_response)
-    meals = meals_and_descriptions.map { |r| r[:meal] }
-    descriptions = meals_and_descriptions.map { |r| r[:description] }
+
+    if meals_and_descriptions[0] == "eval"
+      meals = meals_and_descriptions[1].map { |r| r[:meal] }
+      descriptions = meals_and_descriptions[1].map { |r| r[:description] }
+    else
+      meals = meals_and_descriptions[1].map { |r| r["meal"] }
+      descriptions = meals_and_descriptions[1].map { |r| r["description"] }
+    end
 
     # old meal name extraction method
     # if filtered_json_response.scan(/[A-Z]/).size < 300
