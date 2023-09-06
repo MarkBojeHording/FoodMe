@@ -122,7 +122,7 @@ class DishesController < ApplicationController
       resp = client.completions(
         model: "gpt-3.5-turbo-16k-0613",
         messages: [
-        { role: "user", content: "find all of the meals and separate them from the text in an array of hashes, with their respective descriptions: #{filtered_json_response},
+        { role: "user", content: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response},
             format: 'json'" }
         ]
       )
