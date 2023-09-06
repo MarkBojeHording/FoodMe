@@ -1,61 +1,33 @@
 
-<!--
-<html><head>
-</head><body>
-<div class="picture-container" style="max-width: 390px; nax-height: 830px;">
-    <video class="vh-100" src="" ></video>
-    <input type="file" name="image" accept="image/*" capture="environment">
-</div>
-<button id='flipCamera'>Flip</button>
-</body>
-<script>
-  var front = false;
-var video = document.querySelector('video');
-  document.getElementById('flipCamera').onclick = function() { front = !front; };
-  var constraints = { video: { facingMode: (front? "user" : "environment"), width: 640, height: 480  } };
-  navigator.mediaDevices.getUserMedia(constraints)
-  .then(function(mediaStream) {
-    video.srcObject = mediaStream;
-    video.onloadedmetadata = function(e) {
-    video.play();
-};
-})
-.catch(function(err) { console.log(err.name + ": " + err.message); })
-</script></html>
--->
-
-
-<%# <input type="file" name="image" accept="image/*" capture> %>
-
 <div class='general-home container' data-controller="notification-subscription" data-notification-subscription-user-id-value="<%= current_user.id %>">
-  <div class="logo mt-5 d-flex justify-content-center">
+  <div class="logo d-flex justify-content-center flex-column align-items-center">
     <%= image_tag 'logo-foodme.png', class: 'logo-pic' %>
+    <div class="title">
+      <h1>Food me</h1>
+      <p>Take a pic and see the dish</p>
+    </div>
   </div>
-  <div class="title">
-    <h1>Food me</h1>
-    <p>Take a pic and see the dish</p>
-    <br>
-    <p data-notification-subscription-target='message'></p>
+  <div class="message-card">
+    <p class="message-style" data-notification-subscription-target='message'></p>
   </div>
-  <div class='d-flex flex-column align-items-center justify-content-center' data-controller="upload">
+  <div class='d-flex flex-column align-items-center justify-content-center flex-grow-1' data-controller="upload">
+    <div class="burger d-none" data-controller="burger" data-notification-subscription-target='burger'>
+      <svg id="burger" width="200" height="200"></svg>
+    </div>
     <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
-      <label id="upload">
-      <%= image_tag src="upload.svg"%>
+      <label id="upload" class="" data-notification-subscription-target='form'>
+        <%= image_tag src="upload.svg"%>
         <span style="display:none;">
           <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2", data: {action: "change->upload#changed"} } %>
         </span>
       </label>
-      <br>
-      <label>
-        <button class="btn btn-primary d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
-        <span style="display:none;">
-          <%= f.button :submit, class:'create-menu' %>
-        </span>
-        <br />
-      </label>
+      <button class="btn btn-primary d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
+      <span style="display:none;">
+        <%= f.button :submit, class:'create-menu' %>
+      </span>
     <% end %>
     <label>
-      <span data-upload-target="loader" class="spinner d-none text-white fas fa-spinner fa-spin"></span>
+      <span data-upload-target="loader" data-notification-subscription-target='spinner' class="spinner d-none text-white fas fa-spinner fa-spin"></span>
     </label>
     <!--div class="progress d-none" data-upload-target="loader">
       <div class="color"></div>

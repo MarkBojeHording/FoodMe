@@ -13,12 +13,20 @@ class DishesController < ApplicationController
   end
 
   def text_extract
+
+    NotificationChannel.broadcast_to(
+      current_user,
+      { message: "--> Uploading menu 📥 <--" }
+    )
     @menu = Menu.new(menu_params)
     @menu.user = current_user
     @menu.save
     NotificationChannel.broadcast_to(
       current_user,
-      "Images Uploaded"
+      {
+        message: "--> Analysing menu 🤓 <--",
+        burgerShow: true
+      }
     )
 
     # flash.now[:notice] = "extracting the text "
@@ -136,6 +144,10 @@ class DishesController < ApplicationController
       tidy_up(meals)
       meals.uniq!
     end
+    NotificationChannel.broadcast_to(
+      current_user,
+      { message: "--> Dishes found! 🤤 <--" }
+    )
 
     meals.each do |m|
       language = data_hash["textAnnotations"].first["locale"]
@@ -148,7 +160,7 @@ class DishesController < ApplicationController
       dish = Dish.create!(title: translated_menu, menu: @menu) # this line creates a new dish for each of the found meal titles
       NotificationChannel.broadcast_to(
         current_user,
-      "#{dish.title} is added"
+        { message: "#{dish.title} is added" }
       )
     end
     redirect_to menu_dishes_path(@menu)
