@@ -56,6 +56,8 @@ gem "cloudinary"
 gem "google_custom_search_api" #Google Search Gem
 gem "faraday"
 gem 'easy_translate'
+# gem 'chatgpt-ruby'
+gem 'openai_chatgpt', '~> 0.2.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
