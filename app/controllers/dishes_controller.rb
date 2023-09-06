@@ -119,8 +119,8 @@ class DishesController < ApplicationController
     def open_ai(filtered_json_response)
       require 'openai_chatgpt'
       client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
-      resp = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"]).completions(
-        model: "gpt-3.5-turbo",
+      resp = client.completions(
+        model: "gpt-3.5-turbo-16k-0613",
         messages: [
         { role: "user", content: "find all of the meals and separate them from the text in an array of hashes, with their respective descriptions: #{filtered_json_response},
             format: 'json'" }
