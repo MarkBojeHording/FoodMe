@@ -1,9 +1,10 @@
 // app/assets/config/manifest.json.erb
 {
-  "background_color": "white",
-  "description": "Le Wagon is Europe's best coding bootcamp for creative people & entrepreneurs. Learn to code in 9 weeks with our fullstack coding bootcamp.",
-  "display": "fullscreen",
-  "name": "Le Wagon",
+  "description": "Food Me enables you to see the dishes on a menu",
+  "start_url": "https://www.foodme.me/",
+  "display": "standalone",
+  "name": "Food Me",
+  "scope": "https://www.foodme.me/",
   "icons": [
     <% files = Dir.entries(Rails.root.join("app/assets/images/icons/")).select {|f| !File.directory? f} %>
     <% files.each_with_index do |file, index| %>
