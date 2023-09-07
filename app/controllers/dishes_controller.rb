@@ -186,6 +186,7 @@ class DishesController < ApplicationController
       else
         EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
         translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
+        descriptions[i] = EasyTranslate.translate(descriptions[i], from: language, to: 'en', model: 'nmt')
       end
       # unless /.*(\d|sides|kid|appetizer|starter|main|dessert|breakfast|lunch|dinner).*/ == (translated_menu)
       test_params = %w[sides kid appetizer starter main dessert breakfast lunch dinner menu dish]
