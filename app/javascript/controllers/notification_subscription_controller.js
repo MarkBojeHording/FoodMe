@@ -11,7 +11,7 @@ export default class extends Controller {
       { channel: "NotificationChannel", id: this.userIdValue },
       { received: (data) => {
           console.log(data)
-          this.messageTarget.innerText = data.message
+          this.messageTarget.outerHTML = `<p class='message-style fade-in'>${data.message}</p>`
           this.formTarget.classList.add('d-none')
           if (data.burgerShow) {
             this.burgerTarget.classList.remove('d-none')
