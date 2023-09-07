@@ -7,7 +7,7 @@
     style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;">
     <% @dish.dish_photos.each do |dish_photo| %>
       <swiper-slide>
-        <div class="card-dish" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= image_path dish_photo.url %>)">
+        <div class="card-dish" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= image_path dish_photo.url %>')">
           <%= @dish.title %>
         </div>
       </swiper-slide>
