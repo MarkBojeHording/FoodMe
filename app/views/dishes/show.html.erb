@@ -17,7 +17,9 @@
 <div class="card-show">
   <div class="darkone bg-dark text-white">
     <div class="card-header">
-    <h2><%= @dish.title %> <em>(<%= @dish.t_title %>)</em></h2>
+    <h2><%= @dish.title %></h2>
+    <h3><em><%= @dish.t_title == nil ? "" : "(#{@dish.t_title})" %></em></h3>
+    <p>--------------------</p>
       <h3>Description</h3>
         <p><%= @dish.description == "" ? "Burger Boi KO'd this dish's description... There's nothing left of it for you to see 😵😵" : @dish.description %></p>
     </div>
