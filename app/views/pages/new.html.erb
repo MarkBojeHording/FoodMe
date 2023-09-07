@@ -11,7 +11,7 @@
       <div class="message-card"  data-upload-target="message">
         <p class="message-style" data-notification-subscription-target='message' ></p>
       </div>
-    <div class='d-flex flex-column align-items-center justify-content-center flex-grow-1' style="margin-top: 125px;">
+    <div class='d-flex flex-column align-items-center justify-content-center flex-grow-1' style="margin-top: 40px">
       <div class="burger d-none" data-controller="burger" data-notification-subscription-target='burger'>
         <svg id="burger" width="200" height="200"></svg>
       </div>
@@ -22,7 +22,7 @@
             <%=f.input :photo, as: :file, label_html: {class: 'test'}, input_html: { class: "test2", data: {action: "change->upload#changed"} } %>
           </span>
         </label>
-        <button class="btn btn-primary d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
+        <button class="btn btn-home d-none mt-5" id="upload-submit" data-action="click->upload#clicked" data-upload-target="button" style="animation: fa-beat 1.5s infinite linear;">Food me!</button>
         <span style="display:none;">
           <%= f.button :submit, class:'create-menu' %>
         </span>
