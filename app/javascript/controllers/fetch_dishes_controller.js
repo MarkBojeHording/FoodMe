@@ -17,7 +17,7 @@ export default class extends Controller {
           data.photo.forEach ((photo) => {
             photoHTML +=
             `<swiper-slide class="swip-slid">
-              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${photo["url"]})">
+              <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${photo['url']}')">
                 ${data.dish["title"]}
               </div>
             </swiper-slide>`
