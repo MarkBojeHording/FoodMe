@@ -10,8 +10,9 @@ export default class extends Controller {
     this.channel = createConsumer().subscriptions.create(
       { channel: "NotificationChannel", id: this.userIdValue },
       { received: (data) => {
-          console.log(data)
-          this.messageTarget.outerHTML = `<p class='message-style fade-in'>${data.message}</p>`
+          // console.log(data)
+          this.messageTarget.outerHTML = `<p data-notification-subscription-target="message" class='message-style fade-in'>${data.message}</p>`
+          // console.log(this.messageTarget)
           this.formTarget.classList.add('d-none')
           if (data.burgerShow) {
             this.burgerTarget.classList.remove('d-none')
