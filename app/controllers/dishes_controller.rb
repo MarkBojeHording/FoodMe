@@ -223,7 +223,7 @@ class DishesController < ApplicationController
       if test_params.map { |test| translated_menu.downcase.include?(test) }.include?(true) || /.*\d.*/.match?(translated_menu)
         puts "#{translated_menu} REJECTED!"
       else
-        dish = Dish.create!(title: "#{translated_menu} (#{m})", description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
+        dish = Dish.create!(title: translated_menu, t_title: m, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
         NotificationChannel.broadcast_to(
           User.first,
           { message: "#{dish.title} is added" }
