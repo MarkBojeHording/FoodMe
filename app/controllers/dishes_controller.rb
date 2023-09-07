@@ -216,12 +216,19 @@ class DishesController < ApplicationController
       else
         EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
         translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
+        descriptions[i] = EasyTranslate.translate(descriptions[i], from: language, to: 'en', model: 'nmt')
       end
-      dish = Dish.create!(title: translated_menu, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
-      NotificationChannel.broadcast_to(
-        User.first,
-        { message: "#{dish.title} is added" }
-      )
+      # unless /.*(\d|sides|kid|appetizer|starter|main|dessert|breakfast|lunch|dinner).*/ == (translated_menu)
+      test_params = %w[sides kid appetizer starter main dessert breakfast lunch dinner menu dish]
+      if test_params.map { |test| translated_menu.downcase.include?(test) }.include?(true) || /.*\d.*/.match?(translated_menu)
+        puts "#{translated_menu} REJECTED!"
+      else
+        dish = Dish.create!(title: translated_menu, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
+        NotificationChannel.broadcast_to(
+          User.first,
+          { message: "#{dish.title} is added" }
+        )
+      end
     end
     redirect_to menu_dishes_path(@menu)
   end

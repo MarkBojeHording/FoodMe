@@ -19,7 +19,7 @@
   <div class="darkone bg-dark text-white">
     <div class="card-header">
       <h3>Description</h3>
-        <p><%= @dish.description %></p>
+        <p><%= @dish.description ? @dish.description : "Burger Boi KO'd this dish's description... There's nothing left of it for you to see 😵😵" %></p>
         <p>-----------------------------</p>
         <h3>Ingredients</h3>
     </div>
