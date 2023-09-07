@@ -115,28 +115,53 @@ class DishesController < ApplicationController
     # Step 6 - filter the response to get out the useful stuff
     filtered_json_response = data_hash["fullTextAnnotation"]["pages"][0]["blocks"].map { |b| b["paragraphs"].map { |p| p["words"].map { |w| w["symbols"].map { |s| s["text"] }.join}} }.join
 
-    #OpenAI
+    # #OpenAI
+    # def open_ai(filtered_json_response)
+    #   require 'openai_chatgpt'
+    #   client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
+    #   resp = client.completions(
+    #     model: "gpt-3.5-turbo-16k-0613",
+    #     messages: [
+    #     { role: "user", content: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response},
+    #         format: 'json'" }
+    #     ]
+    #   )
+
     def open_ai(filtered_json_response)
-      require 'openai_chatgpt'
-      client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
-      resp = client.completions(
-        model: "gpt-3.5-turbo-16k-0613",
-        messages: [
-        { role: "user", content: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response},
-            format: 'json'" }
-        ]
+      require 'openai'
+
+      Openai.api_key = ENV["OPENAI_API_KEY"]
+
+      resp = Openai.Completion.create(
+        engine: "text-davinci-003",
+        prompt: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response}",
+        max_tokens: 50, # You can adjust this as needed
+        n: 1, # You can adjust this as needed
+        stop: nil, # You can specify stop words if needed
+        temperature: 0.7, # You can adjust the temperature value as needed
+        format: 'json'
       )
 
-      if eval(resp.results.first.content)
-        ["eval", eval(resp.results.first.content)]
-      else
-        ["json", JSON.parse(resp.results.first.content)]
-      end
+      # Extract the generated text from the response
+      generated_text = resp.choices[0].text
+
+      # Parse the JSON from the generated text (assuming it's a valid JSON)
+      results = JSON.parse(generated_text)
+
+      return results
     end
-    NotificationChannel.broadcast_to(
-      current_user,
-      { message: "--> Dishes found! 🤤 <--" }
-    )
+
+
+  if eval(resp.results.first.content)
+    ["eval", eval(resp.results.first.content)]
+  else
+    ["json", JSON.parse(resp.results.first.content)]
+  end
+end
+  NotificationChannel.broadcast_to(
+    current_user,
+  { message: "--> Dishes found! 🤤 <--" }
+)
 
     meals_and_descriptions = open_ai(filtered_json_response)
 
@@ -237,4 +262,3 @@ class DishesController < ApplicationController
     meals.reject! { |m| %r[[\?\/\*]].match?(m) }
     meals.uniq!
   end
-end
