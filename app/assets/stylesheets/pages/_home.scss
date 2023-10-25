@@ -103,3 +103,18 @@ p {
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
+
+.feedback-link{
+  color: white;
+  float: left;
+  font-size: 16px;
+  text-decoration: none;
+
+
+
+  &:hover {
+    color: rgb(46, 134, 250);
+    transition: 300ms;
+    }
+
+}
