@@ -1,0 +1,32 @@
+.card {
+height: fit-content;
+margin-top: 30%;
+box-shadow: 10px 5px 5px lightgray;
+border-color: black;
+border: solid 1.5px;
+}
+
+.btn-feedback {
+background-color: black;
+border-color: white;
+color: white;
+
+  &:hover {
+  border-color: rgb(46, 134, 250);
+  color: rgb(46, 134, 250);
+  transition: 300ms;
+  }
+}
+
+.back-link {
+  color: white;
+  float: left;
+  font-family: 'Allura';
+  font-size: 24px;
+
+
+  &:hover {
+    color: rgb(46, 134, 250);
+    transition: 300ms;
+    }
+}

@@ -1,0 +1,30 @@
+
+<%# <div class='general-home container' > %>
+  <div style= "text-align: center;">
+    <h1 style="color: white;">Feedbacks</h1>
+  </div>
+  <div style="text-align: center;">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Name</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @feedbacks.each do |feedback| %>
+            <tr>
+              <th scope="row"><%= feedback.feedback_date %></th>
+              <td><%= feedback.name %></td>
+              <td><%= feedback.comment %><br></td>
+              <td>
+                <%= link_to 'x', feedback, data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: 'btn btn-danger' %>
+              </td>
+            </tr>
+        </tbody>
+        <% end %>
+    </table>
+  </div>
+<%# </div> %>
