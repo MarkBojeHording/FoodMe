@@ -14,7 +14,7 @@
 display: none;
 }
 
-.create-menu{
+.create-menu {
   background-color: white;
 }
 
@@ -37,9 +37,9 @@ p {
 
 }
 .general-home{
-  width: 390px;
+  width: 290px;
   height: 100vh;
-  padding: 48px 0;
+  padding: 0px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -104,13 +104,21 @@ p {
   100% {opacity: 1;}
 }
 
-.feedback-link{
+.feedback-line {
+  padding: 20px;
+}
+
+.feedback a {
+  text-decoration: none;
+  color: black;
+}
+
+.feedback {
   color: white;
   float: left;
   font-size: 16px;
   text-decoration: none;
-
-
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 
   &:hover {
     color: rgb(46, 134, 250);

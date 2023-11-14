@@ -1,16 +1,19 @@
-
+<%= link_to root_path, class:"back-button" do %>
+  <i class="back fa-solid fa-arrow-left"></i>
+<% end %>
 
 <div class='general-home container'>
- <br>
-  <%= link_to ' <<Back', :back, class:"back-link"%>
+<br>
+  <%# <%= link_to ' <<Back', :back, class:"back-link"%>
+
   <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title">New feedback</h5>
+      <h5 class="card-title">Feedback</h5>
       <%= form_with model: @feedback, url: feedbacks_path do |f| %>
-        <h6 class="card-subtitle mb-2 text-muted">
+        <%# <h6 class="card-subtitle mb-2 text-muted">
         Type your name and your message!
-        </h6>
-        <br>
+        </h6> %>
+        <%# <br> %>
         <p class="card-text">
           <%= f.label :name %>
           <%= f.text_area :name %>
@@ -18,7 +21,7 @@
           <%= f.text_area :comment %>
         </p>
         <%= f.hidden_field :feedback_date, value: Date.current %>
-        <%= f.submit 'Submit feedback', class: 'btn btn-feedback' %>
+        <%= f.submit 'Submit', class: 'submit-button btn btn-feedback' %>
       <% end %>
     </div>
   </div>
