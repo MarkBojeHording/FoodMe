@@ -16,5 +16,5 @@ Rails.application.routes.draw do
   resources :dishes, only: [:index, :show] do
     resources :ingredients, only: [ :index, :create]
   end
-  resources :feedbacks, only: [:create, :index, :destroy]
+  resources :feedbacks
 end
