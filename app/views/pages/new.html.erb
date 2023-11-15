@@ -30,12 +30,7 @@
       <label>
         <span data-upload-target="loader" data-notification-subscription-target='spinner' class="spinner d-none text-white fas fa-spinner fa-spin"></span>
       </label>
-      <!--div class="progress d-none" data-upload-target="loader">
-        <div class="color"></div>
-      </div-->
-    </div>
-    <br>
-    <br>
+      <div class="feedback-line">
+    <button type="button" class="feedback btn btn-light"><%= link_to "Feedback", new_feedback_path(@feedback)%></button>
   </div>
-  <%= link_to "➡️ Give us a feedback! ", new_feedback_path(@feedback), class:"feedback-link"%>
 </div>

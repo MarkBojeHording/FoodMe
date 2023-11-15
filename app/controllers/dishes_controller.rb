@@ -9,7 +9,6 @@ class DishesController < ApplicationController
   end
 
   def translate
-
   end
 
   def text_extract
@@ -120,7 +119,7 @@ class DishesController < ApplicationController
       require 'openai_chatgpt'
       client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
       resp = client.completions(
-        model: "gpt-3.5-turbo-16k-0613",
+        model: "gpt-3.5-turbo-1106",
         messages: [
         { role: "user", content: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response},
             format: 'json'" }

@@ -1,9 +1,26 @@
 .card {
 height: fit-content;
 margin-top: 30%;
-box-shadow: 10px 5px 5px lightgray;
 border-color: black;
 border: solid 1.5px;
+box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.card-body {
+  padding: 40px;
+}
+
+.card-title {
+  text-align: center;
+  font-size: 30px;
+}
+
+.card-text {
+  text-align: center;
+}
+
+.submit-button {
+  margin: 5px 5px 5px 55px;
 }
 
 .btn-feedback {
