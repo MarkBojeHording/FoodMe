@@ -1,2 +1,0 @@
-GOOGLE_API_KEY = "AIzaSyC-dnqjKFpxZvoUqVIya3Pnn2OLqK7_wUA"
-GOOGLE_SEARCH_CX = "d3cb1ad3a7a93408a"
