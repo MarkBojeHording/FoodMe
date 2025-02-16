@@ -1,0 +1,127 @@
+// Specific CSS for your home-page
+.take-photo {
+  width: 390px;
+  height: 700px;
+}
+.card {
+  width: 390px;
+  height: 700px;
+  margin: auto;
+}
+
+.test {
+display: none;
+}
+
+.create-menu {
+  background-color: white;
+}
+
+.title {
+  color: white;
+  text-align: center;
+
+  h1{
+  font-family: 'Allura', cursive;
+  font-size: 70px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+p {
+  font-family: 'Allura';
+  font-size: 28px;
+  margin-top: -20px;
+}
+
+}
+.general-home{
+  width: 290px;
+  height: 100vh;
+  padding: 0px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  // loader/progress css
+  // position: absolute;
+  // top: 50%;
+  // left: 45%;
+  // transform: translate(-50%,-50%);
+  // background-color: #2a9d8f;
+}
+
+.logo-pic {
+  height: 46px;
+  width: auto;
+}
+
+/* Loader */
+.spinner {
+  margin-top: 80px;
+  font-size: 36px;
+}
+
+// .progress{
+//   position: relative;
+//   height: 10px;
+//   width: 1110%;
+//   border: 10px solid #f4a261;
+//   border-radius: 15px;
+// }
+// .progress .color{
+//   position: absolute;
+//   background-color: #ffffff;
+//   width: 0px;
+//   height: 10px;
+//   border-radius: 15px;
+//   animation: progres 4s infinite linear;
+// }
+// @keyframes progres{
+//   0%{
+//     width: 0%;
+//   }
+//   25%{
+//       width: 50%;
+//   }
+//   50%{
+//       width: 75%;
+//   }
+//   75%{
+//       width: 85%;
+//   }
+//   100%{
+//       width: 100%;
+//   }
+// };
+
+.fade-in {
+  animation: fadeIn 3s;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.feedback-line {
+  padding: 20px;
+}
+
+.feedback a {
+  text-decoration: none;
+  color: black;
+}
+
+.feedback {
+  color: white;
+  float: left;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    color: rgb(46, 134, 250);
+    transition: 300ms;
+    }
+
+}
