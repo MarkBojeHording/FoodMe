@@ -86,3 +86,5 @@ group :test do
 end
 
 gem "devise"
+
+gem "ruby-vips", "~> 2.2"

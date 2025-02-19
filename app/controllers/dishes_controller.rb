@@ -4,273 +4,169 @@ class DishesController < ApplicationController
   def index
     @menu = Menu.find(params[:menu_id])
     @dishes = Dish.includes(:dish_photos).where(menu: @menu)
-
-  # scrape_image(dish) <-- have this fetched for each dish in @menu in a js.
   end
 
   def translate
   end
 
   def text_extract
+    NotificationChannel.broadcast_to(User.first, { message: "Uploading menu 📥" })
 
-    NotificationChannel.broadcast_to(
-      User.first,
-      { message: "Uploading menu 📥" }
-    )
     @menu = Menu.new(menu_params)
     @menu.user = User.first
-    @menu.save
-    NotificationChannel.broadcast_to(
-      User.first,
-      {
-        message: "Analysing menu 🤓",
-        burgerShow: true
-      }
-    )
 
-    # flash.now[:notice] = "extracting the text "
+    Rails.logger.debug "🔍 Trying to save @menu..."
+    if @menu.save
+      Rails.logger.debug "✅ Menu saved successfully! ID: #{@menu.id}"
+    else
+      Rails.logger.debug "❌ Menu save failed: #{@menu.errors.full_messages.join(", ")}"
+      flash[:alert] = "Menu save failed!"
+      return redirect_to root_path
+    end
+
+    NotificationChannel.broadcast_to(User.first, { message: "Analysing menu 🤓", burgerShow: true })
 
     require 'json'
-    # Step 1 - Set path to the image file, API key, and API URL.
-    image_file = @menu.photo.url
-    Rails.logger.debug "url: #{image_file}"
+    require "base64"
+    require "open-uri"
 
-    # API_KEY = 'XXXXXXXXXX' # Don't forget to protect your API key.
+    if @menu.photo.attached?
+      begin
+        image_file_url = url_for(@menu.photo)
+        image_data = URI.open(image_file_url).read
+        base64_image = Base64.strict_encode64(image_data)
+        Rails.logger.debug "📸 Image successfully converted to Base64!"
+      rescue => e
+        Rails.logger.error "❌ Failed to download and convert image: #{e.message}"
+        flash[:alert] = "Failed to process image for OCR."
+        return redirect_to root_path
+      end
+    else
+      Rails.logger.debug "❌ No photo found for OCR!"
+      flash[:alert] = "No photo available for text extraction!"
+      return redirect_to root_path
+    end
+
     api_url = "https://vision.googleapis.com/v1/images:annotate?key=#{ENV["GOOGLE_API_KEY"]}"
-    # Step 2 - Set request JSON body.
-    body = "{
-      'requests': [
-        {
-          'features': [
-            {
-              'maxResults': 50,
-              'type': 'LANDMARK_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'FACE_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'OBJECT_LOCALIZATION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'LOGO_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'LABEL_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'model': 'builtin/latest',
-              'type': 'DOCUMENT_TEXT_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'SAFE_SEARCH_DETECTION'
-            },
-            {
-              'maxResults': 50,
-              'type': 'IMAGE_PROPERTIES'
-            },
-            {
-              'maxResults': 50,
-              'type': 'CROP_HINTS'
-            }
-          ],
-          'image': {
-            'source': {
-              'imageUri': '#{image_file}'
-            }
-          },
-          'imageContext': {
-            'cropHintsParams': {
-              'aspectRatios': [
-                0.8,
-                1,
-                1.2
-              ]
-            }
-          }
-        }
-      ]
-    }"
-    # Step 4 - Send request using Faraday
-    connection = Faraday.new(
-      url: api_url,
-      headers: { 'Content-Type' => 'application/json' }
-    )
+
+    body = {
+      requests: [{
+        features: [{ maxResults: 50, type: 'DOCUMENT_TEXT_DETECTION' }],
+        image: { content: base64_image }
+      }]
+    }.to_json
+
+    connection = Faraday.new(url: api_url, headers: { 'Content-Type' => 'application/json' })
     response = connection.post('', body, "Content-Type" => "application/json")
 
-    # Step 5 - Parse the response into a usable format
-    Rails.logger.debug response.body
+    Rails.logger.debug "📜 OCR Response: #{response.body}"
+
     data_hash = JSON.parse(response.body)["responses"][0]
-    # Menus typically have capitalised or uppercase menu items (followed by lower case descriptions)
-    # and so the following code will take the entire block and *hopefully* return the
-    # meal title.
+    filtered_text = data_hash.dig("fullTextAnnotation", "text") || ""
 
-    # Step 6 - filter the response to get out the useful stuff
-    filtered_json_response = data_hash["fullTextAnnotation"]["pages"][0]["blocks"].map { |b| b["paragraphs"].map { |p| p["words"].map { |w| w["symbols"].map { |s| s["text"] }.join}} }.join
-
-    def open_ai(filtered_json_response)
-      # #OpenAI
-      require 'openai_chatgpt'
-      client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
-      resp = client.completions(
-        model: "gpt-3.5-turbo",
-        messages: [
-        { role: "user", content: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response},
-            format: 'json'" }
-        ]
-      )
-
-    # require 'openai'
-
-    # client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
-    # resp = openai_client.completions(
-    #   engine: "text-davinci-003",
-    #   prompt: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response}",
-    #   max_tokens: 50, # You can adjust this as needed
-    #   n: 1, # You can adjust this as needed
-    #   stop: nil, # You can specify stop words if needed
-    #   temperature: 0.7, # You can adjust the temperature value as needed
-    #   format: 'json'
-    # )
-
-  # resp = client.completions(
-  #   parameters: {
-  #     model: "babbage-002 ",
-  #     prompt: "Find all of the meals and separate them from the given text in an array of hashes, with their respective descriptions (only return the array, nothing else): #{filtered_json_response}",
-  #   }
-  # )
-
-      # Extract the generated  text from the response
-      # generated_text = resp.choices[0].text
-
-      # Parse the JSON from the generated text (assuming it's a valid JSON)
-
-    if eval(resp.results.first.content)
-      ["eval", eval(resp.results.first.content)]
-    else
-      ["json", JSON.parse(resp.results.first.content)]
-    end
-  end
-    #   results = JSON.parse(generated_text)
-
-    #   return results
-    # end
-
-    NotificationChannel.broadcast_to(
-      User.first,
-      { message: "Dishes found! 🤤" }
-    )
-
-    meals_and_descriptions = open_ai(filtered_json_response)
-
-    if meals_and_descriptions[0] == "eval"
-      meals = meals_and_descriptions[1].map { |r| r[:meal] }
-      descriptions = meals_and_descriptions[1].map { |r| r[:description] }
-    else
-      meals = meals_and_descriptions[1].map { |r| r["meal"] }
-      descriptions = meals_and_descriptions[1].map { |r| r["description"] }
+    if filtered_text.blank?
+      Rails.logger.debug "❌ No text extracted from image!"
+      flash[:alert] = "Text extraction failed!"
+      return redirect_to root_path
     end
 
-    # old meal name extraction method
-    # if filtered_json_response.scan(/[A-Z]/).size < 300
-    #   text = filtered_json_response.split(".")
-    #   meals = text.map do |t|
+    meals_and_descriptions = open_ai(filtered_text)
 
-    #     text_split = t.split(/[A-Z]/) # separates into words using capitalised letters as word split point, until next end.
-    #     text_scan = t.scan(/[A-Z]/)
-    #     i = 0
-    #     string = ""
-    #     text_scan.count.times do
-    #       string += text_scan[i]
-    #       string += text_split[i + 1]
-    #       string += " "
-    #       i += 1
-    #     end
-
-    #     pattern = / ?[A-Z].+/
-    #     string.split("\n").size > 1 ? last_string = string.split("\n") : last_string = string.split # checks if blocks are separated by new lines or by spaces
-    #     meal_name = last_string.map do |current_index|
-    #       current_index if pattern.match?(current_index) && current_index.split[0].size < 15 && current_index.split[0].size > 1 # map the current item if conditions are matched (i.e. its a menu item)
-    #     end
-    #     meal_name.join # returns the single joined meal name to be mapped into meals
-    #   end
-    #   tidy_up(meals)
-    # else
-    #   meals = filtered_json_response.split(/[^A-Z]/)
-    #   meals.map!(&:downcase)
-    #   tidy_up(meals)
-    #   meals.uniq!
-    # end
+    meals = meals_and_descriptions[1].map { |r| r["meal"] }
+    descriptions = meals_and_descriptions[1].map { |r| r["description"] }
 
     meals.each_with_index do |m, i|
-      language = data_hash["textAnnotations"].first["locale"]
-      if language == 'en'
-        translated_menu = m
+      next if m.nil? || m.strip.empty?
+
+      Rails.logger.debug "🔄 Attempting to create dish: #{m}"
+
+      dish = Dish.new(title: m, t_title: m, description: descriptions[i], menu: @menu)
+
+      if dish.save
+        Rails.logger.debug "✅ Dish created! ID: #{dish.id}, Title: #{dish.title}"
       else
-        EasyTranslate.api_key = ENV["GOOGLE_API_KEY_TRANSLATE"]
-        translated_menu = EasyTranslate.translate(m, from: language, to: 'en', model: 'nmt')
-        descriptions[i] = EasyTranslate.translate(descriptions[i], from: language, to: 'en', model: 'nmt')
-      end
-      # unless /.*(\d|sides|kid|appetizer|starter|main|dessert|breakfast|lunch|dinner).*/ == (translated_menu)
-      test_params = %w[sides kid appetizer starter main dessert breakfast lunch dinner menu dish]
-      if test_params.map { |test| translated_menu.downcase.include?(test) }.include?(true) || /.*\d.*/.match?(translated_menu)
-        puts "#{translated_menu} REJECTED!"
-      else
-        dish = Dish.create!(title: translated_menu, t_title: m, description: descriptions[i], menu: @menu) # this line creates a new dish for each of the found meal titles
-        NotificationChannel.broadcast_to(
-          User.first,
-          { message: "#{dish.title} is added" }
-        )
+        Rails.logger.debug "❌ Dish save failed: #{dish.errors.full_messages.join(", ")}"
       end
     end
-    redirect_to menu_dishes_path(@menu)
+
+    NotificationChannel.broadcast_to(User.first, { message: "Dishes found! 🤤" })
+
+    # ✅ Final Debugging Before Redirect
+    if @menu.nil?
+      Rails.logger.debug "🚨 ERROR: @menu is NIL before redirecting!"
+      flash[:alert] = "Something went wrong: Menu not found!"
+      return redirect_to root_path
+    end
+
+    Rails.logger.debug "🔍 Redirecting to /menus/#{@menu.id} (menu_path: #{menu_path(@menu) rescue 'ERROR'})"
+
+    respond_to do |format|
+      format.html { redirect_to menu_path(@menu) } # Redirect to the menu's show page
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("body", partial: "shared/redirect", locals: { url: menu_path(@menu) }) }
+    end
   end
 
   def image_search
     dish = Dish.find(params["dish_id"])
-    scrape_image(dish) if dish.dish_photos.count <= 0
-    render json: { dish: Dish.find(params["dish_id"]), photo: Dish.find(params["dish_id"]).dish_photos }
+    scrape_image(dish) if dish.dish_photos.count.zero?
+    render json: { dish: dish, photo: dish.dish_photos }
   end
 
   def show
+    Rails.logger.debug "✅ Dish found: #{@dish.title} (ID: #{@dish.id})"
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @dish }
+    end
   end
 
   private
 
-  def check_url(url)
-    url && url.starts_with?('http') && (url.end_with?('.png') || url.end_with?('.jpg') || url.end_with?('.jpeg') || url.end_with?('.webp'))
-  end
-
-  def scrape_image(dish)
-    result = GoogleCustomSearchApi.search(dish.title)
-    result.items.each do |photo|
-      if (photo.key? "pagemap") && (photo.pagemap.key? "metatags")
-        DishPhoto.create(dish: dish, url: photo.pagemap.metatags.first["og:image"]) if check_url(photo.pagemap.metatags.first["og:image"])
-      elsif (photo.key? "pagemap") && (photo.pagemap.key? "cse_image")
-        DishPhoto.create(dish: dish, url: photo.pagemap.cse_image[0].src) if check_url(photo.pagemap.cse_image[0].src)
-      end
-    end
-  end
-
   def set_dish
-    @dish = Dish.find(params[:id])
+    Rails.logger.debug "🔍 Checking PARAMS[:id]: #{params[:id]}"
+    @dish = Dish.find_by(id: params[:id])
+
+    if @dish.nil?
+      Rails.logger.debug "❌ Dish not found! Redirecting..."
+      flash[:alert] = "Dish not found!"
+      redirect_to root_path and return
+    end
+
+    Rails.logger.debug "✅ Dish found: #{@dish.title} (ID: #{@dish.id})"
   end
 
   def menu_params
     params.require(:menu).permit(:restaurant_name, :photo)
   end
 
-  def tidy_up(meals)
-    meals.reject! { |m| m == "" } # removes blank array elements
-    meals.reject! { |m| m.size < 3 }
-    meals.reject! { |m| m.size > 30 }
-    meals.reject! { |m| %r[[\?\/\*]].match?(m) }
-    meals.uniq!
+  def open_ai(text)
+    require 'openai_chatgpt'
+    client = OpenaiChatgpt::Client.new(api_key: ENV["OPENAI_API_KEY"])
+    resp = client.completions(
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: "Extract meals and descriptions as JSON: #{text}" }]
+    )
+
+    result = resp.results.first.content
+    Rails.logger.debug "🔍 OpenAI Response: #{result}"
+
+    begin
+      ["json", JSON.parse(result)]
+    rescue JSON::ParserError
+      Rails.logger.debug "❌ JSON Parsing failed!"
+      ["error", []]
+    end
+  end
+
+  def scrape_image(dish)
+    result = GoogleCustomSearchApi.search(dish.title)
+    result.items.each do |photo|
+      if photo.dig("pagemap", "metatags", 0, "og:image")&.match?(/\.(png|jpg|jpeg|webp)$/)
+        DishPhoto.create(dish: dish, url: photo["pagemap"]["metatags"][0]["og:image"])
+      elsif photo.dig("pagemap", "cse_image", 0, "src")&.match?(/\.(png|jpg|jpeg|webp)$/)
+        DishPhoto.create(dish: dish, url: photo["pagemap"]["cse_image"][0]["src"])
+      end
+    end
   end
 end

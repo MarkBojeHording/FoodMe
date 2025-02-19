@@ -1,32 +1,44 @@
 <div class="position-relative">
-  <%= link_to :back, class:"back-button position-absolute" do %>
+  <%= link_to :back, class: "back-button position-absolute" do %>
     <i class="back fa-solid fa-arrow-left"></i>
   <% end %>
 
   <swiper-container navigation="false" pagination="true" scrollbar="false" effect="coverflow"
-    style="--swiper-pagination-color: #fff;--swiper-pagination-bullet-inactive-color: #fff;">
-    <% @dish.dish_photos.each do |dish_photo| %>
+    style="--swiper-pagination-color: #fff; --swiper-pagination-bullet-inactive-color: #fff;">
+
+    <% @dishes.each do |dish| %>
+    <% dish.dish_photos.each do |dish_photo| %>
       <swiper-slide>
-        <div class="card-dish" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= image_path dish_photo.url %>')">
+        <p>Testing URL: <%= dish_photo.url %></p>
+        <img src="<%= dish_photo.url %>" alt="Test Image" width="300" height="auto">
+
+        <div class="card-dish"
+          style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= dish_photo.url %>');
+          background-size: cover; background-position: center;">
         </div>
       </swiper-slide>
     <% end %>
+  <% end %>
+
   </swiper-container>
 </div>
 
 <div class="card-show">
   <div class="darkone bg-dark text-white">
     <div class="card-header">
-    <h2><%= @dish.title %></h2>
-    <h3><em><%= @dish.t_title == nil ? "" : "(#{@dish.t_title})" %></em></h3>
-    <p>--------------------</p>
+      <% @dishes.each do |dish| %>
+      <h2><%= dish.title %></h2>
+      <% end %>
+      <h3><em><%= @dish.t_title.present? ? "(#{@dish.t_title})" : "" %></em></h3>
+      <p>--------------------</p>
       <h3>Description</h3>
-        <p><%= @dish.description == "" ? "Burger Boi KO'd this dish's description... There's nothing left of it for you to see 😵😵" : @dish.description %></p>
+      <p>
+        <%= @dish.description.present? ? @dish.description : "Burger Boi KO'd this dish's description... There's nothing left of it for you to see 😵😵" %>
+      </p>
     </div>
     <div class="container">
       <div class="card-body">
-        <blockquote class="blockquote mb-0">
-        </blockquote>
+        <blockquote class="blockquote mb-0"></blockquote>
       </div>
     </div>
   </div>

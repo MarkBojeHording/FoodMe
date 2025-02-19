@@ -15,7 +15,7 @@
       <div class="burger d-none" data-controller="burger" data-notification-subscription-target='burger'>
         <svg id="burger" width="200" height="200"></svg>
       </div>
-      <%= simple_form_for(@menu, url: text_extract_path) do |f| %>
+      <%= simple_form_for(@menu, url: text_extract_path, data: { turbo: false }) do |f| %>
         <label id="upload" class="" data-notification-subscription-target='form'>
           <%= image_tag src="upload.svg"%>
           <span style="display:none;">

@@ -24,25 +24,14 @@ export default class extends Controller {
           })
 
           this.swipersTarget.insertAdjacentHTML("beforeend",
-          `<a class="text-decoration-none" href="/dishes/${data.dish["id"]}">
-            <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
-              ${photoHTML}
-            </swiper-container>
-          </a>`
-          )
+            `<a class="text-decoration-none" href="/dishes/${data.dish["id"]}" data-turbo="false">
+              <swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
+                ${photoHTML}
+              </swiper-container>
+            </a>`
+          );
         });
 
     });
   }
 }
-
-
-// `<swiper-container navigation="false" class="my-swiper col-12 col-lg-4" pagination="true" scrollbar="false" effect="coverflow">
-// data.photo.forEach ((photo) => {
-//     <swiper-slide class="swip-slid">
-//       <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(photo[:url])">
-//         data.dish[:title]
-//       </div>
-//   })
-//     </swiper-slide>
-// </swiper-container>`

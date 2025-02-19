@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'menus/show'
   devise_for :users
 
   root to: "pages#new"
@@ -11,8 +12,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
-  resources :menus, only: [:create] do
-    resources :dishes, only: [:index , :create]
+  resources :menus, only: [:create, :show] do
+    resources :dishes, only: [:index, :create]
   end
   resources :dishes, only: [:index, :show] do
     resources :ingredients, only: [ :index, :create]
